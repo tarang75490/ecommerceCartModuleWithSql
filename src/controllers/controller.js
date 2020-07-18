@@ -8,6 +8,7 @@ exports.createDatabase = (req,res)=>{
         let sql ='CREATE DATABASE CART'
         db.query(sql,(error,response)=>{
           if(error){
+              console.log(123,error)
                 res.code(400)
                 throw new HttpError('faliure', 22005,error)
           } 
@@ -46,15 +47,11 @@ exports.createCartTable = (req,res)=>{
 
 exports.addProduct=  (req, res) => {
     try {
-        let sql =  service.addProductToCart(req.fastify, req.body)
-        console.log(sql,123)
-
-        db.query("INSERT INTO cart SET ?",req.body,(error,response)=>{
+        service.addProductToCart(req.fastify, req.body,(error,response)=>{
             if(error){
                   res.code(400)
                   throw new HttpError('faliure', 22005,error)
             }
-            console.log("hey")
             return res.status(201).send({
                           status: 'success',
                           data: response,
@@ -117,7 +114,7 @@ exports.removeProduct = async (req, res) => {
 
 exports.getProduct= async (req, res) => {
     try {
-        db.query(`SELECT * from cart WHERE customerId= "${req.query.customerId}"`,(error,response)=>{
+        db.query(`SELECT * from cart WHERE customerId= npm ${req.query.customerId}"`,(error,response)=>{
             if(error){
                   res.code(400)
                   throw new HttpError('faliure', 22005,error)

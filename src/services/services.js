@@ -1,17 +1,30 @@
 // const Cart = require('../models/Cart')
+const db = require('../app.js')
+const addProductToCart = (fastify,addProductRequest,callback)=>{
+    // let fields = ''
+    // let values = ''
+    // for(let property in addProductRequest){
+    //     fields += property+','
+    //     values += "'"+addProductRequest[property]+"',"
+    // }
+    // console.log(fields,values)
+    // let sql ="INSERT INTO cart ( "+fields.slice(0,-1)+" ) VALUES ( "+values.slice(0,-1)+" );"
+    // return sql
 
-const addProductToCart = (fastify,addProductRequest)=>{
-    let fields = ''
-    let values = ''
-    for(let property in addProductRequest){
-        fields += property+','
-        values += "'"+addProductRequest[property]+"',"
-    }
-    console.log(fields,values)
-    let sql ="INSERT INTO cart ( "+fields.slice(0,-1)+" ) VALUES ( "+values.slice(0,-1)+" );"
-    return sql
+
     // const cart = await new Cart(addProductRequest).save()
     // return cart
+
+
+    db.query("INSERT INTO cart SET ?",addProductRequest,(error,response)=>{
+        if(error){
+            callback(error,null)
+        }
+        callback(null,response)
+    })
+
+
+
 }
 
 
