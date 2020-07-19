@@ -20,15 +20,16 @@ exports.createDatabase = (req,res)=>{
       })
     }
 exports.createCartTable = (req,res)=>{
-    let sql ='CREATE TABLE cart (customerId VARCHAR(255) ,'+
-                                'mainCategory VARCHAR(255) ,'+
-                                'subCategory VARCHAR(255) ,'+
-                                'productId VARCHAR(255) ,'+
-                                'variantId VARCHAR(255) ,'+
-                                'productName VARCHAR(255) ,'+
+    let sql ='CREATE TABLE cart (customerId VARCHAR(255) NOT NULL,'+
+                                'mainCategory VARCHAR(255) NOT NULL,'+
+                                'subCategory VARCHAR(255) NOT NULL,'+
+                                'productId VARCHAR(255) NOT NULL,'+
+                                'variantId VARCHAR(255) NOT NULL,'+
+                                'productName VARCHAR(255) NOT NULL,'+
                                 'size VARCHAR(255),'+
-                                'color VARCHAR(255),'+
+                                'color VARCHAR(255) ,'+
                                 'price INT(20) NOT NULL,'+
+                                'quantityToBuy INT(20) NOT NULL DEFAULT 1,'+
                                 'quantity INT(20) NOT NULL,'+
                                 "PRIMARY KEY(customerId,variantId))"
         db.query(sql,(error,response)=>{
@@ -47,16 +48,38 @@ exports.createCartTable = (req,res)=>{
 
 exports.addProduct=  (req, res) => {
     try {
-        service.addProductToCart(req.fastify, req.body,(error,response)=>{
-            if(error){
-                  res.code(400)
-                  throw new HttpError('faliure', 22005,error)
+        // service.addProductToCart(req.fastify, req.body,(error,response)=>{
+        //     if(error){
+        //         console.log(error,123)
+        //         res.status(400).send({
+        //             status: 'faliure',
+        //             code:22005,
+        //             message:error
+        //         })
+        //     }
+        //     return res.status(201).send({
+        //                   status: 'success',
+        //                   data: response,
+        //                   message:"Products Added to the cart  Successfully"
+        //   })
+        // })
+        console.log(req.body)
+        db.query("INSERT INTO cart SET ?",req.body,(error,response)=>{
+                console.log(error)
+                if(error){
+                    return res.status(400).send({
+                        status: 'failure',
+                        message: "Unable to insert",
+                        errorCause:error.sqlMessage,
+                        code:22005,
+                })
             }
+            console.log(response,"response")
             return res.status(201).send({
-                          status: 'success',
-                          data: response,
-                          message:"Products Addede to the cart  Successfully"
-          })
+                status: 'success',
+                data: "",
+                message:"Products Added to the cart  Successfully"
+})
         })
     } catch (e) {
         res.code(500)
@@ -114,12 +137,12 @@ exports.removeProduct = async (req, res) => {
 
 exports.getProduct= async (req, res) => {
     try {
-        db.query(`SELECT * from cart WHERE customerId= npm ${req.query.customerId}"`,(error,response)=>{
+        db.query(`SELECT * from cart WHERE customerId=  "${req.query.customerId}"`,(error,response)=>{
             if(error){
                   res.code(400)
                   throw new HttpError('faliure', 22005,error)
             }
-            console.log("hey")
+            console.log(response)
             return res.status(201).send({
                           status: 'success',
                           data: response,
@@ -132,6 +155,27 @@ exports.getProduct= async (req, res) => {
     }
 }
 
+exports.updateQuantityToBuy= async (req, res) => {
+    try {
+        db.query(`UPDATE cart 
+                  SET quantityToBuy = ${req.body.quantityToBuy}
+                  WHERE customerId=  "${req.body.customerId}" AND variantId=  "${req.body.variantId}"`,(error,response)=>{
+            if(error){
+                  res.code(400)
+                  throw new HttpError('faliure', 22005,error)
+            }
+            console.log(response)
+            return res.status(201).send({
+                          status: 'success',
+                          data: response,
+                          message:"Quantity To Buy Updated Successfully"
+          })
+        })
+    } catch (e) {
+        res.code(500)
+        throw new HttpError('faliure', 2001, "Quantity To buy Failed", e.message)
+    }
+}
 // var Insta = require('instamojo-nodejs');
 // exports.updateProduct = async (req, res) => {
 //     try {

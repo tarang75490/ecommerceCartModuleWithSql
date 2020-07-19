@@ -38,6 +38,9 @@ exports.addProduct = {
             "customerId": {
                 "type": "string"
             },
+            "quantityToBuy":{
+                "type":"number"
+            }
     
         },
         "required": [
@@ -48,7 +51,8 @@ exports.addProduct = {
             "price",
             "quantity",
             "mainCategory",
-            "subCategory"
+            "subCategory",
+            "quantityToBuy"
         ]
     },
     
@@ -65,50 +69,7 @@ exports.addProduct = {
                     "type": "string"
                 },
                 "data": {
-                    "type": "object",
-                    "properties": {
-                        "customerId": {
-                            "type": "string"
-                        },
-                        "variantId": {
-                            "type": "string"
-                        },
-                        "productId": {
-                            "type": "string"
-                        },
-                        "productName": {
-                            "type": "string"
-                        },
-                        "price": {
-                            "type": "number"
-                        },
-                        "quantity": {
-                            "type": "number"
-                        },
-                        "mainCategory": {
-                            "type": "string"
-                        },
-                        "subCategory": {
-                            "type": "string"
-                        },
-                        "size": {
-                            "type": "string"
-                        },
-                        "customerId": {
-                            "type": "string"
-                        },
-                
-                    },
-                    // "required": [
-                    //     "customerId",
-                    //     "variantId",
-                    //     "productId",
-                    //     "productName",
-                    //     "price",
-                    //     "quantity",
-                    //     "mainCategory",
-                    //     "subCategory"
-                    // ]
+                    "type": "string"
 
                 }
             },
@@ -612,6 +573,102 @@ exports.emptyCart = {
                 },
                 "data": {
                     "type":"object",
+                }
+            },
+            "required": [
+                "status",
+                "data"
+            ]
+        }, 400: {
+            "description": 'Error response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "errorCause": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status",
+                "message",
+                "code"
+            ]
+        },
+        500: {
+            "description": 'Error response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "errorCause": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status",
+                "message",
+                "code",
+                "errorCause"
+            ]
+        }
+    }
+}
+
+exports.updateQuantityToBuy = {
+    description: 'Add Product to cart',
+    tags: ["Cart"],
+    summary: 'add product',
+    body:{
+        "type": "object",
+        "properties": {
+            "customerId": {
+                "type": "string"
+            },
+            "variantId": {
+                "type": "string"
+            },
+             "quantityToBuy":{
+                "type":"number"
+            }
+    
+        },
+        "required": [
+            "customerId",
+            "variantId",
+            "quantityToBuy"
+        ]
+    },
+    
+    response: {
+        201: {
+            description: 'Successful response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": ['failiure', 'success'],
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "string"
+
                 }
             },
             "required": [

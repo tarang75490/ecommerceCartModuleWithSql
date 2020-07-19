@@ -14,7 +14,7 @@ const routes = [
     },
     {
         method: "DELETE",
-        url: "/removeProductsToCart",
+        url: "/removeProductFromCart",
         handler: controllers.removeProduct,
         schema: documentation.removeProduct,
         preValidation: validators.validateRemoveProductRequest
@@ -32,6 +32,13 @@ const routes = [
         handler: controllers.getProduct,
         schema: documentation.getProduct,
         preValidation: validators.validateGetCartRequest
+    },
+    {
+        method: "PUT",
+        url: "/updateQuantityToBuy",
+        handler: controllers.updateQuantityToBuy,
+        schema: documentation.updateQuantityToBuy,
+        preValidation: validators.validateUpdateQunatityToBuyRequest
     },
     // {
     //     method: "GET",

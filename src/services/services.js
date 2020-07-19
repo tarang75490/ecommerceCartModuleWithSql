@@ -18,7 +18,7 @@ const addProductToCart = (fastify,addProductRequest,callback)=>{
 
     db.query("INSERT INTO cart SET ?",addProductRequest,(error,response)=>{
         if(error){
-            callback(error,null)
+            callback(error.sqlMessage,null)
         }
         callback(null,response)
     })
