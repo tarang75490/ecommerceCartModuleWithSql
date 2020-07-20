@@ -56,8 +56,13 @@ exports.validateGetCartRequest = function (req, res, done) {
 }
 
 
-exports.validateUpdateProductRequest = function (req, res, done) {
- 
+exports.validateUpdateCartRequest = function (req, res, done) {
+    if (!req.body.variantIds  ) {
+        res.code(400)
+        done(new HttpError('faliure', 20001, 'Varaint Idsis missing'))
+    }else{
+        done()
+    }
 }
 
 exports.validateEmptyCartRequest = function (req, res, done) {

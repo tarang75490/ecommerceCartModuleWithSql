@@ -40,13 +40,13 @@ const routes = [
         schema: documentation.updateQuantityToBuy,
         preValidation: validators.validateUpdateQunatityToBuyRequest
     },
-    // {
-    //     method: "GET",
-    //     url: "/updateProductsOfCart",
-    //     handler: controllers.updateProduct,
-    //     // schema: documentation.updateProduct,O
-    //     // preValidation: validators.validateUpdateProductRequest
-    // },
+    {
+        method: "POST",
+        url: "/updateCart",
+        handler: controllers.updateCartAfterPayment,
+        schema: documentation.updateCart,
+        preValidation: validators.validateUpdateCartRequest
+    },
     {
   method: 'GET',
   url: '/createdb',

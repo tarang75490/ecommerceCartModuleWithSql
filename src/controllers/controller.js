@@ -176,6 +176,55 @@ exports.updateQuantityToBuy= async (req, res) => {
         throw new HttpError('faliure', 2001, "Quantity To buy Failed", e.message)
     }
 }
+const mysql = require('mysql')
+exports.updateCartAfterPayment = async (req,res) =>{
+    try{
+        console.log(req.body)
+        const inventory = await req.fastify.axios.post("http://localhost:3000/getInventory",req.body)
+        
+//         UPDATE table_to_update 
+// SET  cod_user= CASE WHEN user_rol = 'student' THEN '622057'
+//                    WHEN user_rol = 'assistant' THEN '2913659'
+//                    WHEN user_rol = 'admin' THEN '6160230'
+//                END
+//     ,date = '12082014'
+// WHERE user_rol IN ('student','assistant','admin')
+//   AND cod_office = '17389551';
+        var sql = `UPDATE cart 
+                    SET quantity = 
+                    CASE`
+        var variantIds ='('
+        inventory.data.data.forEach((variant,index)=>{
+            variantIds += `"${variant.variantId}"`
+            sql += `
+                WHEN variantId = "${variant.variantId}"  THEN ${variant.inventory} `
+            if(req.body.variantIds.length-1 !== index){
+                variantIds +=`,`
+            }
+        })
+        variantIds += `)`
+        sql += `END
+                WHERE variantId IN ${variantIds};`
+        
+        // `UPDATE Cart SET quantity = ? WHERE variantId = ?;`
+        db.query(sql,(error,response)=>{
+            if(error){
+                  res.code(400)
+                  throw new HttpError('faliure', 22005,error)
+            }
+            console.log(response)
+            return res.status(201).send({
+                          status: 'success',
+                          data: response,
+                          message:"Update Cart Successfully"
+          })
+        })
+    }catch(e){
+        console.log(e)
+        res.code(500)
+        throw new HttpError('faliure', 2001, "Update Cart Failed", e.message)
+    }
+}
 // var Insta = require('instamojo-nodejs');
 // exports.updateProduct = async (req, res) => {
 //     try {

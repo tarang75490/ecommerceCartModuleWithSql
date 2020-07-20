@@ -724,3 +724,118 @@ exports.updateQuantityToBuy = {
         }
     }
 }
+
+exports.updateCart = {
+    description: 'Get Cart with inventory',
+    tags: ["Cart"],
+    summary: 'Get Inventory',
+    body: {
+        "type": "object",
+        "properties": {
+            "variantIds": {
+                "type": "array",
+                "items":{
+                    "type":"string"
+                }
+            }
+            
+        },
+        "required": [
+            "variantIds",
+        ]
+    },
+    response: {
+        200: {
+            description: 'Successful response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": ['faliure', 'success'],
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data": {
+                    
+                            // "type":"array",
+                            // "items":{
+                            //     "type":"object",
+                            //     "properties":{
+                            //         "variantId":{
+                            //             "type":"string"
+                            //         },
+                            //         "inventory":{
+                            //             "type":"number"
+                            //         },
+                            //         "reservedInventory":{
+                            //             "type":"number"
+                            //         },
+                            //     },
+                            //     "required":[
+                            //         "variantId",
+                            //         "inventory",
+                            //         "reservedInventory"
+                            // //     ]
+                            // }
+                            "type":"string"
+                   
+                    
+                },
+                },
+            
+            "required": [
+                    "status",
+                    "data"
+                    ]
+
+                
+        }, 400: {
+            "description": 'Error response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "errorCause": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status",
+                "message",
+                "code"
+            ]
+        },
+        500: {
+            "description": 'Error response',
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "errorCause": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status",
+                "message",
+                "code",
+                "errorCause"
+            ]
+        }
+    }
+    }
